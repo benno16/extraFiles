@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_FLASK_JSONRPC
+	bool "python-flask-jsonrpc"
+	help
+          flask-jsonrpc as a Python RPC Flask framework
+
+          https://github.com/cenobites/flask-jsonrpc

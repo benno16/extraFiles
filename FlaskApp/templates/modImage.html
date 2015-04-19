@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block modname %} -> Mod Image{% endblock %}
+{% block content %}
+
+<button type="button" ng-click="StartDirectImaging()" class="btn btn-info">Instant image a disk</button>
+<p class="lead">Loopdevice /dev/loop0 will be copied to /media/images/image.dd  </p>
+{% endblock %}

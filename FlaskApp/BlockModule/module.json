@@ -1,0 +1,6 @@
+{ 
+   "name"		: "BlockModule",
+   "port"	: 5002,
+   "daemon"		: "python __init__.py",
+   "activate"	: "True"
+}

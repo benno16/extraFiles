@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="modStorageApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Webpage for ModStorage">
+    <meta name="author" content="Pieter van der Berg">
+
+    <title>Firebrick OS</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/content/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/static/content/sidebar.css" rel="stylesheet">
+
+    <link href="/static/content/fontawsome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/content/ui-grid.css" rel="stylesheet">
+    <link href="/static/content/tablesort.css" rel="stylesheet">
+    <link href="/static/content/modstorage.css" rel="stylesheet">
+    <link href="/static/content/sb-admin.css" rel="stylesheet">
+
+    <link rel="apple-touch-icon" href="/static/images/fireIcon.png" />
+    
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div id="wrapper" ng-controller="MainController">
+
+        <!-- Sidebar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"><i class="fa fa-fire" style="color:orange"></i> FireBrick OS {% block modname %}{% endblock %}</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+
+                <ul class="nav navbar-nav side-nav">
+                    <li><a href="/modstorage"><i class="fa fa-hdd-o" style="color: #5CFF16"></i> Mod storage</a></li>
+                    <li><a href="/modVizX2"><i class="fa fa-cloud-upload" style="color: #00BEF2"></i> Mod VizX2</a></li>
+                    <li><a href="#" ><i class="fa fa-gears"></i> Mod dummy</a></li>
+                    <li><a href="#" ><i class="fa fa-gears"></i> Mod dummy</a></li>
+                    <li><a href="#" ><i class="fa fa-gears"></i> Mod dummy</a></li>
+                    
+                </ul>
+
+            </div><!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    {% block content %}{% endblock %}
+                </div>
+            </div><!-- /.row -->
+
+        </div><!-- /#page-wrapper -->
+
+    </div><!-- /#wrapper -->
+    <script src="/static/scripts/jquery-2.1.3.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/scripts/bootstrap.min.js"></script>
+    <script src="/static/scripts/angular.min.js"></script>
+    <script src="/static/scripts/angular-json-rpc.min.js"></script>
+    <script src="/static/scripts/ui-grid.min.js"></script>
+    <script src="/static/scripts/angular-tablesort.js"></script>
+    <script src="/static/scripts/ui-bootstrap-tpls-0.12.1.min.js"></script>
+    <!--Application-->
+    <script src="/static/scripts/modstorageapp.js"></script>
+    <script src="/static/scripts/ModelControlers.js"></script>
+</body>
+
+</html>

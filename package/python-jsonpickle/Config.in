@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_JSONPICKLE
+	bool "python-jsonpickle"
+	help
+          jsonpickle is a Python library for serialization and deserialization of complex Python objects to and from JSON
+
+          https://jsonpickle.github.io/

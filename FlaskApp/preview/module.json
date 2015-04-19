@@ -1,0 +1,6 @@
+{ 
+   "name"		: "preview",
+   "port"		: 5004,
+   "daemon"		: "python __init__.py",
+   "activate"	: "True"
+}

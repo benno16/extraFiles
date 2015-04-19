@@ -1,0 +1,31 @@
+﻿.myGrid{
+    width: 80%;
+    
+}
+
+.paddright{
+    padding-right: 10px;
+}
+
+.roundHead .modal-header{
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.mHeadEdit .modal-header{
+       background-color:#F0AD4E;
+       color: #fff;      
+ }
+
+ .mHeadCreate .modal-header{
+       background-color:#5CB85C;
+       color: #fff;      
+ }
+
+ .mError .modal-header{
+      background-color:#D9534F;      
+ }

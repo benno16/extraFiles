@@ -1,0 +1,101 @@
+<html>
+<head>
+	{% if refresh == true %}
+		<meta http-equiv="refresh" content="0; url=http://{{ refreshURL}}:5002/" />
+	{% endif %}
+        <link rel="stylesheet" media="screen" href="{{ url_for ('static', filename='bootstrap.min.css') }}" >
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon1.png') }}" />
+	<title>{{ title }}</title>
+</head>
+
+<body class = "body">
+	<div class="container">
+		<div class="page-header">
+			<h1>Firebrick: {{ title }}</h1>
+		</div>
+		<ul></ul>
+		
+		{% if pageType == 'index' %}
+		
+		<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="panel-heading"><a href="#" onclick='location.reload(true); return false;'><span class="glyphicon glyphicon-refresh" aria-hidden="true"></a> Refresh Page
+			</div>
+			<div class="panel-body">
+				<p>This module allows you to <b>1)</b> Mount block devices as read-only loopback devices and <b>2)</b> Detach loopback devices (previously mounted) </p>
+				<p>Two Listings are presented: Available Block Devices and Mounted Loopback devices. To mount or detach a loop device select the appropriate action in the<b> Select </b>column.</p>
+                                <p> You can either mount a block device as a loopback device(<span class="glyphicon glyphicon-play" aria-hidden="true"></span>) or detach a loopback device(<span class="glyphicon glyphicon-stop" aria-hidden="true"></span>)</p>
+			</div>
+			<div class="panel-heading"><b>Block Devices Listing</b></div>
+			<div class="panel-body">
+                <p>To expose a block device as a read-only loopback device, select the option button (<span class="glyphicon glyphicon-play" aria-hidden="true"></span>) for the appropriate row</p>
+			</div>
+			<!-- Table -->
+			<table class="table">
+				<thead>
+					<th>ID</th><th>Source</th><th>Serial No</th><th>Size</th><th>Type</th><th>Select</th>
+				</thead>
+				<tbody>
+					{% for p in paragraph %}
+					{% if p.id is defined %}
+					<tr>
+						<th scope="row" style="vertical-align:middle">{{ p.id }}</th>
+						<td style="vertical-align:middle">{{ p.name }}</td>
+						<td style="vertical-align:middle">{{ p.serial }}</td>
+                                                <td style="vertical-align:middle">{{ p.size }}</td>
+                                                <td style="vertical-align:middle">{{ p.type }}</td>
+						<td style="vertical-align:middle">
+						<form action="Mount" method="POST">
+							<input type="hidden" name="Mdevice" value="{{ p.name }}">
+							<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Mount as Loop</button>
+						</form>
+					</tr>
+					{% else %}
+					<tr>
+						<th scope="row" colspan="7">No  Device Available</th>
+					</tr>
+					{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="panel-heading"><b> Loopback Devices Listing</b></div>
+			<div class="panel-body">
+                                <p> To detach a loopback Device, select the option button (<span class="glyphicon glyphicon-stop" aria-hidden="true"></span>) for the appropriate row.</p>
+			</div>
+                        <!-- Table -->
+			<table class="table">
+				<thead>
+					<th>ID</th><th>Source</th><th>Mountpoint</th><th>Info</th><th>Select</th>
+				</thead>
+				<tbody>
+					{% for p2 in paragraph2 %}
+					{% if p2.id is defined %}
+					<tr>
+						<th scope="row" style="vertical-align:middle">{{ p2.id }}</th>
+						<td style="vertical-align:middle">{{ p2.source }}</td>
+                                                <td style="vertical-align:middle">{{ p2.mountpoint }}</td>
+                                                <td style="vertical-align:middle">{{ p2.info }}</td>
+						<td style="vertical-align:middle">
+						<form action="Unmount" method="POST">
+							<input type="hidden" name="Udevice" value={{ p2.mountpoint }}>
+							<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Detach Loop</button>
+						</form>
+					</tr>
+					{% else %}
+					<tr>
+						<th scope="row" colspan="7">No  Device Available</th>
+					</tr>
+					{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+        {% endif %}
+</body>
+<script src="{{ url_for('static', filename='jquery-1.11.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+
+</html>

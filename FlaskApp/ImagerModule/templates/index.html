@@ -1,0 +1,130 @@
+<html>
+
+<head>
+
+	{% if refresh == true %}
+
+		<meta http-equiv="refresh" content="0; url=http://{{ refreshURL}}:5005/" />
+
+	{% endif %}
+
+        <link rel="stylesheet" media="screen" href="{{ url_for ('static', filename='bootstrap.min.css') }}" >
+
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon1.png') }}" />
+
+	<title>{{ title }}</title>
+
+</head>
+
+
+
+<body class = "body">
+
+	<div class="container">
+
+		<div class="page-header">
+
+			<h1>Firebrick: {{ title }}</h1>
+
+		</div>
+
+		<ul></ul>
+
+		
+
+		{% if pageType == 'index' %}
+
+		
+
+		<div class="panel panel-default">
+
+			<!-- Default panel contents -->
+
+			<div class="panel-heading"><a href="#" onclick='location.reload(true); return false;'><span class="glyphicon glyphicon-refresh" aria-hidden="true"></a> Refresh Page
+
+			</div>
+
+			<div class="panel-body">
+
+				<p>This module allows you create a forensic image of an attached device. To create an image select the device ( <span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span> ) you want to image. If no devices are listed go to the Block Loader page and mount the required device</p>
+
+			<!-- Table -->
+
+			
+
+			<div class="panel panel-default">
+
+			<!-- Default panel contents -->
+
+			<div class="panel-heading"><b> Devices Available for Imaging</b></div>
+
+			
+
+                        <!-- Table -->
+
+			<table class="table">
+
+				<thead>
+
+					<th>ID</th><th>Info</th><th>Mountpoint</th><th>Select</th>
+
+				</thead>
+
+				<tbody>
+
+					{% for p in paragraph %}
+
+					{% if p.id is defined %}
+
+					<tr>
+
+						<th scope="row" style="vertical-align:middle">{{ p.id }}</th>
+
+						<td style="vertical-align:middle">{{ p.info }}</td>
+
+                                                <td style="vertical-align:middle">{{ p.mountpoint }}</td>
+
+						<td style="vertical-align:middle">
+
+						<form action="http://178.62.22.54:5005/mount" method="POST">
+
+						<input type="hidden" name="Udevice" value={{ p.mountpoint }}>
+
+						<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span> Begin Imaging Process</button>
+<!--						</form>
+<!--					<form method="get" action="http://178.62.22.54:5005/mount">  <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span> Image Device</button>
+					</form>
+					</tr>	
+
+					{% else %}
+
+					<tr>
+
+						<th scope="row" colspan="7">No  Device Available</th>
+
+					</tr>
+
+					{% endif %}
+
+					{% endfor %}
+
+				</tbody>
+
+			</table>
+
+		</div>
+
+	</div>
+
+        {% endif %}
+
+</body>
+
+<script src="{{ url_for('static', filename='jquery-1.11.2.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+
+
+
+</html>
+

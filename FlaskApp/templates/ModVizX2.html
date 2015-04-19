@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block modname %} -> Mod VizX2{% endblock %}
+{% block content %}
+
+{% raw %}
+
+<div class="container-fluid" ng-controller="modVizXController">
+    <div class="row paddright">
+        <div class="col-md-11"><h4>Configuration</h4></div>
+        <div class="col-md-1"><img src="/static/images/VizX2.png" /></div>
+    </div>
+
+    <div class="row paddright">
+        <div class="col-md-1">VizX API adress:</div>
+        <div class="col-md-6"><input class="form-control input-sm" type="text" ng-model="ApiAddress" /></div>
+        <div class="col-md-5"><!-- --></div>
+    </div>
+    &nbsp;
+    <div class="row paddright">
+        <div class="col-md-1"></div>
+        <div class="col-md-2"><button class="btn btn-primary" ng-click="SaveConfiguration()">Save</button></div>
+        <div class="col-md-8"><!-- --></div>
+    </div>
+</div>
+
+&nbsp;
+
+
+    {% endraw %}
+
+
+{% endblock %}

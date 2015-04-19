@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block modname %} -> Mod preview{% endblock %}
+{% block content %}
+
+{% if pageType == 'index' %}
+		
+		<div class="panel panel-default">
+			<!-- Default panel contents -->
+			<div class="panel-heading"><a href="#" onclick='location.reload(true); return false;'><span class="glyphicon glyphicon-refresh" aria-hidden="true"></a> Loopback Device List
+			{% if tgtUp == False %}
+				<div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span><strong> Oh snap! </strong>iSCSI service is not running!</div>
+			{% endif %}
+			</div>
+			<div class="panel-body">
+				<p>This module allows to offer block devices, which are setup as loop back devices on the <a href="http://digitalfire.ucd.ie/?page_id=1011" target="_blank">Firebrick</a>, via iSCSI targets to remote machines. </p>
+				<p>The table shows all available loop back devices and some information about same. To export or hide the device simply select the available option in the toggle column. You can either export (<span class="glyphicon glyphicon-play" aria-hidden="true"></span>) or hide (<span class="glyphicon glyphicon-stop" aria-hidden="true"></span>) the block device. Devices can be mapped using their unique target identifier. More information on using the initiator on remote devices can be found here: <a href="https://technet.microsoft.com/en-us/library/ee338477(v=ws.10).aspx" target="_blank">Windows</a>, <a href="https://www.synology.com/en-us/knowledgebase/tutorials/468" target="_blank">Mac OS</a> and <a href="https://help.ubuntu.com/lts/serverguide/iscsi-initiator.html" target="_blank">Ubuntu</a></p>
+				<p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Please note that hiding the drive is forced and will stop all sessions without warning. </p>
+			</div>
+			<!-- Table -->
+			<table class="table">
+				<thead>
+					<th>ID</th><th>Mountpoint</th><th>Source</th><th>Info</th><th>Exported</th><th>Target</th><th>Toggle</th>
+				</thead>
+				<tbody>
+					{% for p in paragraph %}
+					{% if p.id is defined %}
+					<tr>
+						<th scope="row" style="vertical-align:middle">{{ p.id }}</th>
+						<td style="vertical-align:middle">{{ p.mountpoint }}</td>
+						<td style="vertical-align:middle">
+						{% if ('sd' in p.source) or ('hd' in p.source) %}
+						<span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> {{ p.source }}
+						{% elif 'fd' in p.source %}
+						<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> {{ p.source }}
+						{% elif ('cd' in p.source) or ('sr' in p.source) or ('dvd' in p.source) %}
+						<span class="glyphicon glyphicon-cd" aria-hidden="true"></span> {{ p.source }}
+						{% elif ('raw' in p.source) or ('.' in p.source) %}
+						<span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span> {{ p.source }}
+						{% elif 'usb' in p.source %}
+						<span class="glyphicon glyphicon-phone" aria-hidden="true"></span> {{ p.source }}
+						{% else %}
+						<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> {{ p.source }}
+						{%endif%}
+						</td>
+						<td style="vertical-align:middle">{{ p.info }}</td>
+						<td style="vertical-align:middle">
+							{% if p.exported == true %}
+								<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+							{% else %}
+								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+							{% endif %}
+						</td>
+						<td style="vertical-align:middle">
+							{% if p.target == '' %} 
+								<span class="glyphicon glyphicon-remove" aria-hidden="true"> 
+							{% else %}
+								{{ p.target }}
+							{% endif %}
+						</td>
+						<td style="vertical-align:middle">
+							{% if tgtUp == true %}
+							{% if p.exported == true %}
+								<form action="/modPreview/hideDev" method="post">
+								<input type="hidden" name="deviceId" value="{{ p.id }}">
+								<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Hide</button>
+								</form>
+							{% else %}
+								<form action="/modPreview/exportOverIscsi" method="post">
+								<input type="hidden" name="deviceId" value="{{ p.id }}">
+								<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Export</button>
+								</form>
+							{% endif %}
+							{% else %}
+								<span class="glyphicon glyphicon-alert" aria-hidden="true"></span> n/a
+							{% endif %}
+						</td>
+					</tr>
+					{% else %}
+					<tr>
+						<th scope="row" colspan="7">No Loopback Device Available</th>
+					</tr>
+					{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="panel-footer">
+				<p><a href="/modPreview/about">About Module</a></p>
+			</div>
+		</div>
+		
+		
+		
+		{% elif pageType == 'about' %}
+		{% for p in paragraph %}
+		<p>{{ p }}</p>
+		{% endfor %}
+		<p>{{ version }}</p>
+		<p>Bla bla bla, project presentation 3. This is Ben, it all works. Quite a few safeguards included. Gonna be OK! </p>
+		<p><span class="glyphicon glyphicon-king" aria-hidden="true"></span> <span class="glyphicon glyphicon-queen" aria-hidden="true"></span> <span class="glyphicon glyphicon-pawn" aria-hidden="true"></span> <span class="glyphicon glyphicon-bishop" aria-hidden="true"></span> <span class="glyphicon glyphicon-knight" aria-hidden="true"></span></p>
+		<p><a href="/modPreview"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Go Back </a></p>
+		{% endif %}
+
+{% endblock %}

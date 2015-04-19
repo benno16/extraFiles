@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% raw %}
+
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped" ts-wrapper>
+        <thead>
+            <tr>
+                <th ts-criteria="Name">Name</th>
+                <th ts-criteria="Path">Path</th>
+                <th ts-criteria="UserName">User name</th>
+                <th ts-criteria="IsActive">Is active</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="storage in Storages track by storage.ID" ts-repeat>
+                <td>{{storage.Name}}</td>
+                <td>{{storage.Path}}</td>
+                <td>{{storage.UserName}}</td>
+                <td>{{storage.IsActive|checkmark}}</td>
+                <td>
+                    <button type="button" ng-click="editItem(storage)" class="btn btn-warning btn-xs">Edit</button>
+                    &nbsp;
+                    <button type="button" ng-click="deleteItem(storage)" class="btn btn-danger btn-xs">Delete</button>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+    {% endraw %}
+
+
+{% endblock %}

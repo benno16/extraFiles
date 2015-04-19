@@ -1,0 +1,37 @@
+#!/bin/sh
+NAME=firebrickd
+DESC="Busybox Firebrick Server"
+
+test -f $DAEMON || exit 1
+
+set -e
+
+case "$1" in
+    start)
+        echo -n "starting $DESC: $NAME... "
+		 /sbin/start-stop-daemon -S -x /FlaskApp/firebrickd  -b
+	echo "done."
+	;;
+    stop)
+        echo -n "stopping $DESC: $NAME... "
+	/sbin/start-stop-daemon -K -n python
+	echo "done."
+	;;
+    restart)
+        echo "restarting $DESC: $NAME... "
+ 	$0 stop
+	$0 start
+	echo "done."
+	;;
+    reload)
+    	echo -n "reloading $DESC: $NAME... "
+    	killall -HUP $(basename ${DAEMON})
+	echo "done."
+	;;
+    *)
+	echo "Usage: $0 {start|stop|restart|reload}"
+	exit 1
+	;;
+esac
+
+exit 0

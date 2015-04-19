@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PYTHON_CHERRYPY
+	bool "python-cherrypy"
+	help
+          CherryPy is a pythonic, object-oriented HTTP framework
+
+          https://pypi.python.org/pypi/CherryPy

@@ -1,0 +1,6 @@
+{ 
+   "name"		: "imager",
+   "port"	: 5005,
+   "daemon"		: "__main__.py",
+   "activate"	: "True"
+}

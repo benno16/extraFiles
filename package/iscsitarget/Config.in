@@ -1,0 +1,15 @@
+config BR2_PACKAGE_ISCSITARGET
+	bool "iscsitarget"
+	select BR2_PACKAGE_OPENSSL
+	help
+	  The iSCSI Enterprise Target software allows export block devices
+	  so they can be used as iSCSI Targets by other devices.
+
+	  http://sourceforge.net/apps/mediawiki/iscsitarget
+
+config BR2_PACKAGE_ISCSITARGET_KMOD
+	bool 'compile the iscsitarget kernel module'
+	depends on BR2_LINUX_KERNEL
+
+comment "iscsitarget needs a Linux kernel to be built"
+	depends on !BR2_LINUX_KERNEL

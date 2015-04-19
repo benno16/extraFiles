@@ -1,0 +1,6 @@
+config BR2_PACKAGE_STGT
+	bool "stgt"
+	help
+          stgt aims to simplify various SCSI target driver (iSCSI, Fibre Channel, SRP, etc) creation and maintenance
+
+          http://stgt.sourceforge.net/

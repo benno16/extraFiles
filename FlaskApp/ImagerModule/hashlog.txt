@@ -1,0 +1,4 @@
+d3631d759b77b2a1f12a2463761f0824fcb557b4  image.dd
+d3631d759b77b2a1f12a2463761f0824fcb557b4  /dev/sr0
+ebcb73f29d30a90df6d72dec554a7de7  image.dd
+ebcb73f29d30a90df6d72dec554a7de7  /dev/sr0

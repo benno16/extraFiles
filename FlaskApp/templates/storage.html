@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block modname %} -> Mod Storage{% endblock %}
+{% block content %}
+
+{% raw %}
+
+<div class="container-fluid">
+    <div class="row paddright">
+        <div class="col-md-11"><h4>Configured storages</h4></div>
+        <div class="col-md-1"><button type="button" ng-click="newStorage()" class="btn btn-success"><i class="fa fa-plus"></i> Add storage</button></div>
+
+    </div>
+
+</div>
+
+&nbsp;
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped" ts-wrapper>
+        <thead>
+            <tr>
+                <th ts-criteria="Name">Name</th>
+                <th ts-criteria="Path">Path</th>
+                <th ts-criteria="MountedTo">Mounted to</th>
+                <th ts-criteria="UserName">User name</th>
+                <th ts-criteria="IsActive">Is active</th>
+                <th ts-criteria="LastError">Last error</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="storage in Storages track by storage.ID" ts-repeat>
+                <td>{{storage.Name}}</td>
+                <td>{{storage.Path}}</td>
+                <td>{{storage.MountedTo}}</td>
+                <td>{{storage.UserName}}</td>
+                <td>{{storage.IsActive|checkmark}}</td>
+                <td>{{storage.LastError}}</td>
+                <td>
+                    <button type="button" ng-click="editItem(storage)" class="btn btn-warning btn-xs">Edit</button>
+                    &nbsp;
+                    <button type="button" ng-click="deleteItem(storage)" class="btn btn-danger btn-xs">Delete</button>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>
+  
+    {% endraw %}
+
+
+{% endblock %}

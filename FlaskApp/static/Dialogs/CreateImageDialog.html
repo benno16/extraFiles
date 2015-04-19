@@ -1,0 +1,68 @@
+<div class="modal-header">
+    <h3 class="modal-title">Create a disk image</h3>
+</div>
+<div class="modal-body">
+   <div class="container">
+        <div class="row">
+            <div class="col-sm-4"><p class="lead">Select source:</p></div>
+            <div class="col-sm-8"><select data-ng-options="d for d in Sourcedrives" data-ng-model="item.SourcePath"></select></dropdown></div>
+        </div>    
+		
+		<div class="row">
+			<div class="col-sm-12">
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+				  <li class="active">
+					  <a href="#local" role="tab" data-toggle="tab">
+						  <i class="fa fa-hdd-o"></i> Local
+					  </a>
+				  </li>
+				  <li><a href="#remote" role="tab" data-toggle="tab">
+					  <i class="fa fa-external-link"></i> Remote
+					  </a>
+				  </li>				  
+				</ul>
+				<!-- Tab panes -->
+				<div class="tab-content">
+				  <div class="tab-pane fade active in" id="local">
+					  <div data-angular-treeview="true"
+						 data-tree-id="fileTree"
+						 data-tree-model="treedata"
+						 data-node-id="Path"
+						 data-node-label="Name"
+						 data-node-children="Children">
+					</div>
+				  </div>
+				  <div class="tab-pane fade" id="remote">
+					  <div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped" ts-wrapper>
+        <thead>
+            <tr>
+                <th ts-criteria="Name">Name</th>
+                <th ts-criteria="Path">Path</th>                
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="storage in Storages track by storage.ID" ts-repeat>
+				
+                <td>{{storage.Name}}</td>
+                <td>{{storage.Path}}</td>
+            </tr>
+        </tbody>
+    </table>
+	
+</div>
+				  </div>				  
+				</div>
+				
+				
+					
+			</div>
+		</div> 
+		
+    </div>  
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Start</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
