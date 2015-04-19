@@ -3,7 +3,7 @@
 #
 ISCSITARGET_VERSION = r503
 ISCSITARGET_SOURCE = iscsitarget-1.4.20.2.tar.gz
-ISCSITARGET_SITE = http://www.go-unified.com/firebrick
+ISCSITARGET_SITE = https://raw.githubusercontent.com/benno16/extraFiles/master/package/sources
 
 ifeq ($(BR2_PACKAGE_ISCSITARGET_KMOD),y)
 ISCSITARGET_DEPENDENCIES = linux
