@@ -54,7 +54,7 @@ def read_data(proc_output):
         if len ( entry ) > 1:
             i = i + 1
             ld = entry.split()
-            LoopDeviceList.append( LoopDevice(i, ld[0][:-1], ld[1], ld[2][1:-1]) )
+            LoopDeviceList.append( LoopDevice(i, ld[0][:-1], ld[1], ld[2]) )
 
 
 def interpret_lshw(proc_output):

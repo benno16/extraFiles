@@ -3,6 +3,7 @@ import flask
 import os
 import socket
 from flask import Flask, render_template, url_for, request, json, Response, jsonify
+from rtslib import *
 
 from preview import jsonrpc
 
@@ -13,10 +14,12 @@ devices = []
 response = []
 exportActive = False
 storageDeviceList = []
+iscsi = FabricModule("iscsi")
 
 # Classes
 class StorageDevice: 
 	sdCount = 0
+	global iscsi
 	'common base class for all storage devices'
 	def __init__ (self, id, mountpoint, info, source):
 		self.id = id
@@ -25,6 +28,10 @@ class StorageDevice:
 		self.source = source
 		self.exported = False
 		self.target = ""
+		self.blk = ""
+		self.itarget =  ""
+		self.tpg = ""
+		self.lun = ""
 		StorageDevice.sdCount += 1
 		
 	def displayStorageDevice(self):
@@ -35,35 +42,35 @@ class StorageDevice:
 
 # Helper Functions
 if os.name != "nt":
-    import fcntl
-    import struct
+	import fcntl
+	import struct
 
-    def get_interface_ip(ifname):
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s',
-                                ifname[:15]))[20:24])
+	def get_interface_ip(ifname):
+		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s',
+								ifname[:15]))[20:24])
 
 def get_lan_ip():
-    ip = socket.gethostbyname(socket.gethostname())
-    if ip.startswith("127.") and os.name != "nt":
-        interfaces = [
-            "eth0",
-            "eth1",
-            "eth2",
-            "wlan0",
-            "wlan1",
-            "wifi0",
-            "ath0",
-            "ath1",
-            "ppp0",
-            ]
-        for ifname in interfaces:
-            try:
-                ip = get_interface_ip(ifname)
-                break
-            except IOError:
-                pass
-    return ip
+	ip = socket.gethostbyname(socket.gethostname())
+	if ip.startswith("127.") and os.name != "nt":
+		interfaces = [
+			"eth0",
+			"eth1",
+			"eth2",
+			"wlan0",
+			"wlan1",
+			"wifi0",
+			"ath0",
+			"ath1",
+			"ppp0",
+			]
+		for ifname in interfaces:
+			try:
+				ip = get_interface_ip(ifname)
+				break
+			except IOError:
+				pass
+	return ip
 
 # check if TGT service running!
 # for demo deactivated! 
@@ -78,12 +85,12 @@ def checkTGT():
 # this should say False!
 
 def execute_command(exe_cmd):
-    proc = subprocess.Popen(exe_cmd, stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE)
-    out = proc.stdout.read()
-    err = proc.communicate()
-    #print "Exe Output: " + out
-    return out
+	proc = subprocess.Popen(exe_cmd, stdout=subprocess.PIPE,
+									 stderr=subprocess.PIPE)
+	out = proc.stdout.read()
+	err = proc.communicate()
+	#print "Exe Output: " + out
+	return out
 
 def read_data(proc_output):
 	newstorageDeviceList = []
@@ -108,7 +115,7 @@ def read_data(proc_output):
 
 			if (doesExist == False):
 				#print "ID: ", ld[0], " Value: ", ld[1], " other: ", ld[2]
-				storageDeviceList.append( StorageDevice(i, ld[0][:-1], ld[1], ld[2][1:-1]) )
+				storageDeviceList.append( StorageDevice(i, ld[0][:-1], ld[1], ld[2]) )
 								
 def get_exe_output(proc_output):
 	resultString = ""
@@ -122,22 +129,35 @@ def get_exe_output(proc_output):
 #	3: tgtadm --lld iscsi --op bind --mode target --tid 1 -I ALL
 def tgtadmAdd(sd):
 	mp = getattr(sd, 'mountpoint')
-	target = "iqn.1997-04.ie.ucd:firebrick-target-" + getattr(sd, 'mountpoint')[5:]
+	target = "iqn.1997-04.ie.ucd:firebrick-target-" + mp[5:]
 	tid = getattr(sd, 'id') + 1
 
-#	Comment till stgt is added	
-#	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'new', '--mode', 'target', '--tid', str(tid), '--targetname', target]
-#	get_exe_output(execute_command(tgtatm_cmd))
-#
-#	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'new', '--mode', 'logicalunit', '--tid', str(tid) , '--lun', '1', '-b', mp]
-#	get_exe_output(execute_command(tgtatm_cmd))
-#
-#	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'bind', '--mode', 'target', '--tid', str(tid), '-I', 'ALL']
-#	get_exe_output(execute_command(tgtatm_cmd))
-#	Comment till stgt is added	
+	blk = BlockStorageObject(mp[5:],mp,"",True)
+
+	global iscsi
+	
+	itarget = Target(iscsi, target)
+	tpg = TPG(itarget, tid)
+
+	portal = NetworkPortal(tpg, "0.0.0.0", 3260)
+
+	lun = LUN(tpg, getattr(sd, 'id'), blk)
+
+	tpg.set_attribute("authentication", "0")
+	tpg.set_attribute("demo_mode_write_protect", "0")
+	tpg.set_attribute("generate_node_acls", "1")
+	tpg.set_attribute("cache_dynamic_acls", "1")
+	tpg.set_attribute("demo_mode_discovery", "1")
+	tpg.set_parameter("AuthMethod", "None")
+
+	tpg._set_enable(True)
 
 	setattr(sd, 'exported', True)
 	setattr(sd, 'target', target)
+	setattr(sd, 'itarget', itarget)
+	setattr(sd, 'blk', blk)
+	setattr(sd, 'tpg', tpg)
+	setattr(sd, 'lun', lun)
 	
 	global exportActive
 	exportActive = True
@@ -151,19 +171,33 @@ def tgtadmAdd(sd):
 #	Possible Error: tgtadm: this target is still active
 def tgtadmDel(sd):
 	tid = getattr(sd, 'id') + 1
-#	Comment till stgt is added	
-#	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'delete', '--force', '--mode', 'target', '--tid', str(tid)]
-#	Comment till stgt is added	
 	
 	global exportActive
-#	Comment till stgt is added	
-#	if len (get_exe_output(execute_command(tgtatm_cmd))) > 5:
-#	Comment till stgt is added	
+	blk = getattr(sd, 'blk')
+	itarget = getattr(sd, 'itarget')
+	lun = getattr(sd, 'lun')
+	tpg = getattr(sd, 'tpg')
+
+	lun.delete()
+	tpg.delete()
+	itarget.delete()
+	blk.delete()
+	
+#	clear_cmd = ['targetctl', 'clear']
+#	execute_command(clear_cmd)
+
+#	restart_cmd = ['/etc/init.d/S50target', 'restart']
+#	execute_command(restart_cmd)
+
 	if 1 > 5:
 		response.append ({ "error" : "Target probably still in use"})
 	else: 
 		setattr(sd, 'exported', False)
-		setattr(sd, 'target', "")
+		setattr(sd, 'target', "")		
+		setattr(sd, 'itarget', "")
+		setattr(sd, 'blk', "")
+		setattr(sd, 'tpg', "")
+		setattr(sd, 'lun', "")
 		exportActive = False
 		response.append ({ "success" : "Target successfully removed"})
 	
@@ -247,15 +281,15 @@ def hideDevJSONImp(device):
 
 @jsonrpc.method('preview.getDevices', doIt=getDevicesImp)
 def getDevicesJSON():
-    return getDevicesImp()
+	return getDevicesImp()
 	
 	
 @jsonrpc.method('preview.exportOverIscsi(device = int) -> Object', validate = True)
 def exportOverIscsiJSON(device):
-    return exportOverIscsiJSONImp(device)
+	return exportOverIscsiJSONImp(device)
 	
 	
 @jsonrpc.method('preview.hideDev(device = int) -> Object', validate = True)
 def hideDevJSON(device):
-    return hideDevJSONImp(device)
-
+	return hideDevJSONImp(device)
+	
