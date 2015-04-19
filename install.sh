@@ -65,6 +65,11 @@ git clone https://github.com/benno16/extraFiles.git
 #unzip -oqq firebrick.zip
 #rm firebrick*.zip*
 
+echo -e "\e[7mAdjust POSIX in Firebrick OS\e[27m"
+chmod +x /root/firebrick4/extraFiles/*.sh
+chmod +x /root/firebrick4/extraFiles/init.d/*
+chmod +x /root/firebrick4/extraFiles/FlaskApp/firebrickd
+
 # now we start building the shit! 
 MEMORYSIZE=$(cat /proc/meminfo | grep MemTotal | awk '{ print $2 }')
 
