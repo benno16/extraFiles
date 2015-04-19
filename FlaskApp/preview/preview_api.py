@@ -124,16 +124,18 @@ def tgtadmAdd(sd):
 	mp = getattr(sd, 'mountpoint')
 	target = "iqn.1997-04.ie.ucd:firebrick-target-" + getattr(sd, 'mountpoint')[5:]
 	tid = getattr(sd, 'id') + 1
-	
-	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'new', '--mode', 'target', '--tid', str(tid), '--targetname', target]
-	get_exe_output(execute_command(tgtatm_cmd))
 
-	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'new', '--mode', 'logicalunit', '--tid', str(tid) , '--lun', '1', '-b', mp]
-	get_exe_output(execute_command(tgtatm_cmd))
+#	Comment till stgt is added	
+#	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'new', '--mode', 'target', '--tid', str(tid), '--targetname', target]
+#	get_exe_output(execute_command(tgtatm_cmd))
+#
+#	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'new', '--mode', 'logicalunit', '--tid', str(tid) , '--lun', '1', '-b', mp]
+#	get_exe_output(execute_command(tgtatm_cmd))
+#
+#	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'bind', '--mode', 'target', '--tid', str(tid), '-I', 'ALL']
+#	get_exe_output(execute_command(tgtatm_cmd))
+#	Comment till stgt is added	
 
-	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'bind', '--mode', 'target', '--tid', str(tid), '-I', 'ALL']
-	get_exe_output(execute_command(tgtatm_cmd))
-	
 	setattr(sd, 'exported', True)
 	setattr(sd, 'target', target)
 	
@@ -149,10 +151,15 @@ def tgtadmAdd(sd):
 #	Possible Error: tgtadm: this target is still active
 def tgtadmDel(sd):
 	tid = getattr(sd, 'id') + 1
-	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'delete', '--force', '--mode', 'target', '--tid', str(tid)]
+#	Comment till stgt is added	
+#	tgtatm_cmd = ['tgtadm', '--lld', 'iscsi', '--op', 'delete', '--force', '--mode', 'target', '--tid', str(tid)]
+#	Comment till stgt is added	
 	
 	global exportActive
-	if len (get_exe_output(execute_command(tgtatm_cmd))) > 5:
+#	Comment till stgt is added	
+#	if len (get_exe_output(execute_command(tgtatm_cmd))) > 5:
+#	Comment till stgt is added	
+	if 1 > 5:
 		response.append ({ "error" : "Target probably still in use"})
 	else: 
 		setattr(sd, 'exported', False)
