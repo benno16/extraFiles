@@ -29,7 +29,7 @@ def home():
 """ ModStorage 
 """
 
-import ModStorage.api
+#import ModStorage.api
 
 @app.route('/modstorage')
 def modstorage():
@@ -42,7 +42,7 @@ def modstorage():
 """ ModVizX2 
 """	
 
-import ModStorage.api
+#import ModStorage.api
 
 @app.route('/modVizX2')
 def modvizx2():
